@@ -15,7 +15,6 @@ interface UserData {
 
 const Players: React.FC = () => {
   const { loading, data } = useQuery<UserData>(GET_USERS);
-  console.log(data);
   const displayUsers = () => {
     if (data?.users) {
       return data.users.map((user: User) => <h1 key={user.id}>{user.name}</h1>);
