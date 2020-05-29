@@ -10,7 +10,7 @@ interface User {
 }
 
 interface UserData {
-  users: User[]
+  users: User[];
 }
 
 const Players: React.FC = () => {
