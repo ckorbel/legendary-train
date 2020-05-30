@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import gql from "graphql-tag";
+import { RegisterPageStyled } from "./RegisterPageStyled";
 import { useMutation } from "@apollo/react-hooks";
-import styled from "styled-components";
 
 interface IRegisterPageState {
   name: string;
@@ -22,37 +22,6 @@ const CREATE_NEW_USER = gql`
   }
 `;
 
-const RegisterPageStyled = styled.div`
-  background-color: gray;
-  width: 100%;
-  min-height: 100vh;
-
-  .register-form {
-    width: 300px;
-    margin: 0 auto;
-    background-color: white;
-    text-align: center;
-  }
-
-  input {
-    line-height: 3.15;
-  }
-
-  .submit-button {
-    font-size: var(--f6);
-    margin-right: auto;
-    margin-left: auto;
-    text-transform: uppercase;
-    background-color: #d52b1e;
-    color: #fff;
-    width: 100%;
-    line-height: 1.25;
-    justify-content: center;
-    align-items: center;
-    display: flex;
-  }
-`;
-
 const RegisterPage = () => {
   const [userData, setUserData] = useState<IRegisterPageState>({
     name: "",
@@ -68,45 +37,71 @@ const RegisterPage = () => {
     } as any);
   };
 
-  const onSubmit = (event: React.FormEvent<EventTarget>): void => {
+  const createUser = (event: React.FormEvent<EventTarget>): void => {
     event.preventDefault();
     console.log(userData);
   };
 
   const { name, email, password } = userData;
-
   return (
-    <RegisterPageStyled>
-      <div className="form-container">
-        <form className="register-form" onSubmit={(e) => onSubmit(e)}>
-          <input
-            type="text"
-            name="name"
-            onChange={(e) => updateUser(e)}
-            value={name}
-            placeholder="Name"
-            required
-          />
-          <input
-            type="text"
-            name="email"
-            onChange={(e) => updateUser(e)}
-            value={email}
-            placeholder="Email Address"
-            required
-          />
-          <input
-            type="text"
-            name="password"
-            onChange={(e) => updateUser(e)}
-            value={password}
-            placeholder="Password"
-            required
-          />
-          <button className="submit-button" type="submit">
-            Register
-          </button>
-        </form>
+    <RegisterPageStyled className="container">
+      <div className="row form-container">
+        <div className="col-sm-6 col-md-4 col-md-offset-4 main-form">
+          <h1 className="text-center login-title">Sign in</h1>
+          <div className="account-wall">
+            <img
+              className="profile-img"
+              src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=120"
+              alt=""
+            />
+            <form className="form-signin" onSubmit={(e): void => createUser(e)}>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Username"
+                name="name"
+                value={name}
+                onChange={(e): void => updateUser(e)}
+                required
+              />
+              <input
+                type="text"
+                className="form-control"
+                name="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e): void => updateUser(e)}
+                required
+              />
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Password"
+                name="password"
+                value={password}
+                onChange={(e): void => updateUser(e)}
+                required
+              />
+              <button
+                className="btn btn-lg btn-primary btn-block"
+                type="submit"
+              >
+                Sign in
+              </button>
+              <label className="checkbox pull-left">
+                <input type="checkbox" value="remember-me" />
+                Remember me
+              </label>
+              <a href="#" className="pull-right need-help">
+                Need help?{" "}
+              </a>
+              <span className="clearfix"></span>
+            </form>
+          </div>
+          <a href="#" className="text-center new-account">
+            Create an account{" "}
+          </a>
+        </div>
       </div>
     </RegisterPageStyled>
   );
