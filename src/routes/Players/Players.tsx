@@ -1,32 +1,35 @@
-import React from "react";
-
+import React, { useState, useEffect } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import { GET_USERS } from "../../queries/users";
+import { getUsers } from "../../lib/user";
 
-interface User {
+interface IUser {
   id?: string | number | undefined;
   name?: string;
   email?: string;
 }
 
-interface UserData {
-  users: User[];
+interface IUserState {
+  users: IUser[] | null;
 }
 
 const Players: React.FC = () => {
-  const { loading, data } = useQuery<UserData>(GET_USERS);
-  const displayUsers = () => {
-    if (data?.users) {
-      return data.users.map((user: User) => <h1 key={user.id}>{user.name}</h1>);
-    } else {
-      return <div>Users are loading</div>;
+  const [users, setUsers] = useState<any>();
+
+  useEffect(() => {
+    async function getUser() {
+      const users = await getUsers();
+      setUsers(users);
     }
-  };
+    getUser();
+  }, []);
 
   return (
     <div>
-      I am home Players Page
-      {displayUsers()}
+      <h1>Players Page</h1>
+      {users
+        ? users.map((user: IUser) => <h1 key={user.id}>{user.name}</h1>)
+        : null}
     </div>
   );
 };
