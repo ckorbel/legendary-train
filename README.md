@@ -1,6 +1,6 @@
 The client for Dynamic Data Visualization project. 
 
-Ultilizes React + TypeScript + D3.
+Ultilizes React + Apollo/GraphQL +TypeScript + D3.
 
 ### `yarn start`
 
