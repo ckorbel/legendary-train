@@ -1,4 +1,9 @@
-import { GET_ALL_TEAMS, GET_TEAM_POST_SPENDING } from "../queries/team";
+import {
+  GET_ALL_TEAMS,
+  GET_TEAM_SPENDING_ALL,
+  GET_TEAM_SPENDING_TEAM,
+  GET_TEAM_SPENDING_POS_ONLY,
+} from "../queries/team";
 import { QueryOptions } from "apollo-boost";
 import getClient from "../core/apollo/index";
 
@@ -21,7 +26,7 @@ const getTeamPostionSpending = async (id: string): Promise<any> => {
   try {
     const client = await getClient();
     const options: QueryOptions = {
-      query: GET_TEAM_POST_SPENDING,
+      query: GET_TEAM_SPENDING_POS_ONLY,
       variables: {
         id,
       },

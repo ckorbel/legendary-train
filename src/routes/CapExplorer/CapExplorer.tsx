@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import SidePanel from "./SidePanel/SidePanel";
 import DataWorld from "./DataWorld/DataWorld";
+import Pie from "./CapGraphs/Pie";
 
 import { getTeams, getTeamPostionSpending } from "../../lib/team";
 
@@ -64,7 +65,14 @@ const CapExlorer: React.FC = () => {
   return (
     <CapExlorerStyled>
       <SidePanel teams={teams} selectTeam={selectTeamToGraph} />
-      <DataWorld selectedTeam={selected} />
+      <div style={{ display: "flex" }}>
+        {selected &&
+          selected.map((teamSpending) => {
+            return (
+              <Pie selectedTeamsData={teamSpending} key={teamSpending.id} />
+            );
+          })}
+      </div>
     </CapExlorerStyled>
   );
 };

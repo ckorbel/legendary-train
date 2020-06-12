@@ -13,7 +13,50 @@ const GET_ALL_TEAMS = gql`
   }
 `;
 
-const GET_TEAM_POST_SPENDING = gql`
+const GET_TEAM_SPENDING_POS_ONLY = gql`
+  query team($id: ID!) {
+    team(id: $id) {
+      id
+      name
+      location
+      abbrv_location
+      division
+      yearlyPostSpending {
+        id
+        qb
+        rb
+        wr
+        te
+        ol
+        dl
+        lb
+        s
+        cb
+        year
+      }
+    }
+  }
+`;
+
+const GET_TEAM_SPENDING_TEAM = gql`
+  query team($id: ID!) {
+    team(id: $id) {
+      id
+      name
+      location
+      abbrv_location
+      division
+      yearlyPostSpending {
+        id
+        year
+        Defense
+        Offense
+      }
+    }
+  }
+`;
+
+const GET_TEAM_SPENDING_ALL = gql`
   query team($id: ID!) {
     team(id: $id) {
       id
@@ -40,4 +83,9 @@ const GET_TEAM_POST_SPENDING = gql`
   }
 `;
 
-export { GET_ALL_TEAMS, GET_TEAM_POST_SPENDING };
+export {
+  GET_ALL_TEAMS,
+  GET_TEAM_SPENDING_ALL,
+  GET_TEAM_SPENDING_TEAM,
+  GET_TEAM_SPENDING_POS_ONLY,
+};
