@@ -8,7 +8,7 @@ import HomePage from "./routes/HomePage/HomePage";
 import Players from "./routes/Players/Players";
 import Teams from "./routes/Teams/Teams";
 import RegisterPage from "./routes/Register/RegisterPage";
-import CapExplorer from "./routes/CapExplorer/CapExplorer";
+import CapExplorer from "./routes/CapExplorer/CapExplorerContainer";
 import "./App.css";
 
 import { Provider } from "react-redux";

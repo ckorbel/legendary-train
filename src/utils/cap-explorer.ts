@@ -1,33 +1,19 @@
-interface IYearlyPostionalSpending {
-  [key: string]: number | undefined | string;
-  id?: string;
-  qb?: number;
-  rb?: number;
-  wr?: number;
-  te?: number;
-  ol?: number;
-  dl?: number;
-  lb?: number;
-  s?: number;
-  cb?: number;
-  year?: number;
-  Defense?: number;
-  Offense?: number;
-}
+import {
+  Team,
+  IYearlyPostionalSpending,
+} from "../actions/team-spending/team-spending.types";
 
-export function numberWithCommas(cash: number): string {
+function numberWithCommas(cash: number): string {
   return cash.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-// export function calculateSpendingTotal(
-//   spendingObj: IYearlyPostionalSpending
-// ): number {
-//   let sum = 0;
-//   for (let key in spendingObj) {
-//   }
-// }
+function doesTeamExist(teams: Team[], id: string): boolean {
+  return teams.some((team) => {
+    return team.id === id;
+  });
+}
 
-export function filterCapCategories(
+function filterCapCategories(
   spendingObj: IYearlyPostionalSpending,
   fitlerObj: IYearlyPostionalSpending
 ): IYearlyPostionalSpending {
@@ -38,3 +24,5 @@ export function filterCapCategories(
   }
   return spendingObj;
 }
+
+export { doesTeamExist, filterCapCategories, numberWithCommas };

@@ -1,3 +1,4 @@
+import { TeamBaseState } from "../team-spending/team-spending.types";
 export const SET_ALERT: "SET_ALERT" = "SET_ALERT";
 export const REMOVE_ALERT: "REMOVE_ALERT" = "REMOVE_ALERT";
 
@@ -8,11 +9,12 @@ export interface AlertState {
 }
 export interface BaseState {
   alert: AlertState;
+  team: TeamBaseState;
 }
 
 export enum AlertActionTypes {
   SET_ALERT = "SET_ALERT",
-  REMOVE_ALERT = "REMOVE_ALERT"
+  REMOVE_ALERT = "REMOVE_ALERT",
 }
 export interface SetAlertAction {
   type: AlertActionTypes.SET_ALERT;

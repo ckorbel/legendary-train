@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import SidePanelStyled from "./SidePanelStyled";
-import { ITeam } from "../CapExplorer";
+import { Team } from "../../../actions/team-spending/team-spending.types";
 
 interface SidePanelProps {
-  teams: ITeam[];
-  selectTeam: (team: ITeam) => void;
+  teams: Team[];
+  selectTeam: (team: Team) => void;
 }
 
 const SidePanel: React.FC<SidePanelProps> = ({ teams, selectTeam }) => {

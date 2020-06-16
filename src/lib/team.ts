@@ -26,7 +26,7 @@ const getTeamPostionSpending = async (id: string): Promise<any> => {
   try {
     const client = await getClient();
     const options: QueryOptions = {
-      query: GET_TEAM_SPENDING_POS_ONLY,
+      query: GET_TEAM_SPENDING_ALL,
       variables: {
         id,
       },

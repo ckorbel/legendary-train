@@ -1,12 +1,22 @@
 import React, { useRef, useEffect, useState } from "react";
+import styled from "styled-components";
 import * as d3 from "d3";
 import { filterCapCategories } from "../../../utils/cap-explorer";
+
+const PieStyled = styled.div`
+  width: 45%;
+  height: "fit-content";
+  margin-left: 20px;
+  svg:not(:root) {
+    overflow: visible;
+  }
+`;
 
 const width = 550;
 const height = 550;
 const margin = 40;
 
-const Pie = ({ selectedTeamsData }) => {
+const Pie = ({ selectedTeamsData, removeSelection }) => {
   const [filters, setFilters] = useState({
     id: 1,
     __typename: "",
@@ -35,8 +45,7 @@ const Pie = ({ selectedTeamsData }) => {
         selectedTeamsData?.yearlyPostSpending?.[0],
         filters
       );
-      // set the color scale
-      const color = d3.scaleOrdinal().domain([]).range(d3.schemeDark2);
+      const color = d3.scaleOrdinal(d3.schemeBlues[9]);
 
       // Compute the position of each group on the pie:
       const pie = d3
@@ -101,9 +110,10 @@ const Pie = ({ selectedTeamsData }) => {
         .text((d) => {
           const sum = d3.sum(d3.values(data));
           const percentage = (d.data.value / sum) * 100;
-          const percent = percentage.toString().slice(0, 2);
+          const percent = percentage.toString().split(".")[0];
+          console.log(percent);
           console.log(d.data.value, percentage * 100);
-          return `${d.data.key} ${percent}%`;
+          return `${d.data.key.toUpperCase()} ${percent}%`;
         })
         .attr("transform", (d) => {
           const pos = outerArc.centroid(d);
@@ -118,22 +128,24 @@ const Pie = ({ selectedTeamsData }) => {
     }
   };
 
+  const removeFromExplorer = (event) => {
+    event.preventDefault();
+    removeSelection(selectedTeamsData.id);
+  };
+
   return (
     <>
-      <div
-        style={{
-          width: "fit-content",
-          height: "fit-content",
-        }}
-      >
+      <PieStyled>
         <div>{selectedTeamsData.name}</div>
+        <button onClick={removeFromExplorer}>X</button>
         <svg
+          viewBox="0 0 550 550"
+          xmlns="http://www.w3.org/2000/svg"
+          overflow="visible"
           className="d3-component"
-          width={550}
-          height={550}
           ref={d3Container}
         />
-      </div>
+      </PieStyled>
     </>
   );
 };
