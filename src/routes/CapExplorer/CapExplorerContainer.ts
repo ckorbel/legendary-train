@@ -8,10 +8,10 @@ import {
 
 const mapState = (state: BaseState) => {
   const { team } = state;
-  const { teams, teamSpending } = team;
+  const { teams, teamHistoricalSpending } = team;
   return {
     teams,
-    teamSpending,
+    teamHistoricalSpending,
   };
 };
 

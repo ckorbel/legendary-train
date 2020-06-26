@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { connect } from "react-redux";
 import styled from "styled-components";
 import SidePanel from "./SidePanel/SidePanel";
 import ExploreOptionsBar from "./ExplorerOptions/ExplorerOptionsBar";
 import Pie from "./CapGraphs/Pie";
 import { doesTeamExist } from "../../utils/cap-explorer";
-import { getTeams, getTeamPostionSpending } from "../../lib/team";
+import { getTeamPostionSpending } from "../../lib/team";
 import { BaseState } from "../../actions/alert/alert.types";
+import { filterCapCategories } from "../../utils/cap-explorer";
 import {
   IYearlyPostionalSpending,
   TeamSpendingState,
+  PostitionalSpending,
+  SideOfBallSpending,
+  TeamWithSpending,
   Team,
 } from "../../actions/team-spending/team-spending.types";
 
@@ -20,7 +23,7 @@ export interface IExplorerOptionsBarState {
 
 interface CapExplorerProps {
   teamSpending: TeamSpendingState[];
-  teams: Team[];
+  teams: TeamWithSpending[];
   getAllTeams: () => void;
   setTeamSpendings: (id: string) => void;
 }
@@ -42,8 +45,7 @@ const CapExplorer: React.FC<CapExplorerProps> = ({
   teamSpending,
   teams,
 }) => {
-  // const [teams, setTeams] = useState<Team[]>([]);
-  const [selected, setSelectedTeams] = useState<Team[]>([]);
+  const [selected, setSelectedTeams] = useState<TeamWithSpending[]>([]);
   const [formData, setFormData] = useState<IExplorerOptionsBarState>({
     positionSpending: "position",
     historical: false,
@@ -51,6 +53,7 @@ const CapExplorer: React.FC<CapExplorerProps> = ({
 
   useEffect(() => {
     getAllTeams();
+    setTeamSpendings("ckb12b09m003e0734ze6gn35f");
   }, []);
 
   const selectTeamToGraph = async (team: Team): Promise<any> => {
@@ -62,9 +65,11 @@ const CapExplorer: React.FC<CapExplorerProps> = ({
   };
 
   const removeSelection = (id: string): void => {
-    const newSelected: Team[] | [] = selected.filter((team: Team): boolean => {
-      return team.id !== id;
-    });
+    const newSelected: TeamWithSpending[] | [] = selected.filter(
+      (team: TeamWithSpending): boolean => {
+        return team.id !== id;
+      }
+    );
     setSelectedTeams(newSelected);
   };
 
@@ -73,6 +78,20 @@ const CapExplorer: React.FC<CapExplorerProps> = ({
       ...formData,
       positionSpending: value,
     } as any);
+  };
+
+  const fitleredToPosition = (
+    spendObj: TeamWithSpending
+  ): SideOfBallSpending | PostitionalSpending | null => {
+    if (!spendObj) return null;
+    const filterObj: any = {
+      id: 1,
+      __typename: "",
+      year: "",
+      Offense: 0,
+      Defense: 0,
+    };
+    return filterCapCategories(spendObj?.yearlyPostSpending?.[0], filterObj);
   };
 
   return (
@@ -88,6 +107,8 @@ const CapExplorer: React.FC<CapExplorerProps> = ({
                   selectedTeamsData={teamSpending}
                   key={teamSpending.id}
                   removeSelection={removeSelection}
+                  selectedData={formData.positionSpending}
+                  positionalSpending={fitleredToPosition(teamSpending)}
                 />
               );
             })}
@@ -96,16 +117,5 @@ const CapExplorer: React.FC<CapExplorerProps> = ({
     </>
   );
 };
-
-// const mapState = (state: BaseState) => {
-//   const { teamSpending } = state || {};
-//   return {
-//     teamSpending,
-//   };
-// };
-
-// const mapDispatch = {
-//   setTeamSpendings,
-// };
 
 export default CapExplorer;

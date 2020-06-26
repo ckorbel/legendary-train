@@ -22,7 +22,10 @@ export interface Team {
   division: string;
   logo: string;
   abbrv_location: string;
-  yearlyPostSpending?: IYearlyPostionalSpending[];
+}
+
+export interface TeamWithSpending extends Team {
+  yearlyPostSpending: IYearlyPostionalSpending[];
 }
 
 export interface PostitionalSpending {
@@ -54,8 +57,9 @@ export interface TeamSpendingState {
 }
 
 export interface TeamBaseState {
-  teamSpending: TeamSpendingState[];
-  teams: Team[];
+  nflAverageSpending: TeamWithSpending[];
+  teamHistoricalSpending: TeamSpendingState[];
+  teams: TeamWithSpending[];
   loading: boolean;
 }
 
@@ -72,8 +76,15 @@ export enum TeamActionTypes {
   SET_TEAM_LOADING = "SET_TEAM_LOADING",
   GET_TEAM_SPENDING_SUCCESS = "GET_TEAM_SPENDING_SUCCESS",
   GET_SPENDING_ERROR = "GET_SPENDING_ERROR",
-  GET_ALL_TEAMS = "GET_ALL_TEAMS",
   GET_ALL_TEAMS_SUCCESS = "GET_ALL_TEAMS_SUCCESS",
+  GET_TEAM_HISTORICAL = "GET_TEAM_HISTORICAL",
+}
+
+export interface GetTeamHistoricalAction {
+  type: TeamActionTypes.GET_TEAM_HISTORICAL;
+  teamHistoricalSpending: TeamSpendingState;
+  nflAverageSpending: TeamSpendingState;
+  loading: false;
 }
 
 export interface SetTeamSpendingAction {
@@ -102,4 +113,5 @@ export type TeamSpendingAction =
   | SetTeamSpendingAction
   | GetSpendingErrorAction
   | GetAllTeamsActions
-  | SetTeamLoadingAction;
+  | SetTeamLoadingAction
+  | GetTeamHistoricalAction;

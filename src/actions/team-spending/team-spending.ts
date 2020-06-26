@@ -1,6 +1,7 @@
 import { ThunkAction } from "redux-thunk";
 import {
   TeamBaseState,
+  TeamWithSpending,
   TeamSpendingState,
   TeamActionTypes,
   SetTeamSpendingAction,
@@ -8,19 +9,23 @@ import {
   GetSpendingErrorAction,
   GetAllTeamsActions,
   SetTeamLoadingAction,
-  Team,
+  GetTeamHistoricalAction,
 } from "./team-spending.types";
 import { getTeamPostionSpending, getTeams } from "../../lib/team";
 
-const setTeamSpending = (
-  payload: TeamSpendingState
-): SetTeamSpendingAction => ({
-  type: TeamActionTypes.GET_TEAM_SPENDING_SUCCESS,
-  payload,
+const nflAverageId: string = "ckbmhb9dw007n0734ywuwbiru";
+
+const setTeamHistoricalSpending = (
+  teamHistoricalSpending: TeamSpendingState,
+  nflAverageSpending: TeamSpendingState
+): GetTeamHistoricalAction => ({
+  type: TeamActionTypes.GET_TEAM_HISTORICAL,
+  teamHistoricalSpending,
+  nflAverageSpending,
   loading: false,
 });
 
-const getTeamsSuccess = (payload: Team[]): GetAllTeamsActions => ({
+const getTeamsSuccess = (payload: TeamWithSpending[]): GetAllTeamsActions => ({
   type: TeamActionTypes.GET_ALL_TEAMS_SUCCESS,
   payload,
   loading: false,
@@ -44,13 +49,16 @@ export function setTeamSpendings<AppState extends TeamBaseState>(
   Promise<void>,
   AppState,
   {},
-  SetTeamSpendingAction | GetSpendingErrorAction | SetTeamLoadingAction
+  GetTeamHistoricalAction | GetSpendingErrorAction | SetTeamLoadingAction
 > {
   return async (dispatch, getState): Promise<void> => {
     dispatch(setTeamLoading());
     try {
-      const data = await getTeamPostionSpending(id);
-      dispatch(setTeamSpending(data));
+      const [nflAverageSpending, teamSpending] = await Promise.all([
+        getTeamPostionSpending(nflAverageId),
+        getTeamPostionSpending(id),
+      ]);
+      dispatch(setTeamHistoricalSpending(teamSpending, nflAverageSpending));
     } catch (err) {
       dispatch(setSpendingError(err));
       throw new Error(err);

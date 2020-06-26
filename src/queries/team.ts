@@ -2,7 +2,7 @@ import { gql } from "apollo-boost";
 
 const GET_ALL_TEAMS = gql`
   query {
-    teams {
+    teams(orderBy: name_ASC) {
       name
       id
       location

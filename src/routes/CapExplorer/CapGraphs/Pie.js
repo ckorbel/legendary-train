@@ -16,18 +16,18 @@ const width = 550;
 const height = 550;
 const margin = 40;
 
-const Pie = ({ selectedTeamsData, removeSelection }) => {
-  const [filters, setFilters] = useState({
-    id: 1,
-    __typename: "",
-    year: "",
-  });
-
+const Pie = ({
+  positionalSpending,
+  selectedTeamsData,
+  selectedData,
+  removeSelection,
+}) => {
   const d3Container = useRef(null);
 
   useEffect(() => {
+    console.log("useEffect");
     buildDataVizualtion();
-  }, [selectedTeamsData]);
+  }, [positionalSpending]);
 
   const buildDataVizualtion = () => {
     if (selectedTeamsData && d3Container.current) {
@@ -40,11 +40,6 @@ const Pie = ({ selectedTeamsData, removeSelection }) => {
         .attr("height", height)
         .append("g")
         .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
-
-      const data = filterCapCategories(
-        selectedTeamsData?.yearlyPostSpending?.[0],
-        filters
-      );
       const color = d3.scaleOrdinal(d3.schemeBlues[9]);
 
       // Compute the position of each group on the pie:
@@ -54,7 +49,8 @@ const Pie = ({ selectedTeamsData, removeSelection }) => {
         .value((d) => {
           return d.value;
         });
-      const data_ready = pie(d3.entries(data));
+
+      const data_ready = pie(d3.entries(positionalSpending));
 
       // The arc generator
       const arc = d3
@@ -101,18 +97,15 @@ const Pie = ({ selectedTeamsData, removeSelection }) => {
         });
 
       // Add the polylines between chart and labels:
-
       svg
         .selectAll("allLabels")
         .data(data_ready)
         .enter()
         .append("text")
         .text((d) => {
-          const sum = d3.sum(d3.values(data));
+          const sum = d3.sum(d3.values(positionalSpending));
           const percentage = (d.data.value / sum) * 100;
           const percent = percentage.toString().split(".")[0];
-          console.log(percent);
-          console.log(d.data.value, percentage * 100);
           return `${d.data.key.toUpperCase()} ${percent}%`;
         })
         .attr("transform", (d) => {

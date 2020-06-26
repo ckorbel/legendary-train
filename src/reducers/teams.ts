@@ -5,7 +5,8 @@ import {
 } from "../actions/team-spending/team-spending.types";
 
 const initialState: TeamBaseState = {
-  teamSpending: [],
+  nflAverageSpending: [],
+  teamHistoricalSpending: [],
   teams: [],
   loading: false,
 };
@@ -15,7 +16,15 @@ export default function (state = initialState, action: TeamSpendingAction) {
     case TeamActionTypes.GET_TEAM_SPENDING_SUCCESS:
       return {
         ...state,
-        teamSpending: action.payload,
+        teamHistoricalSpending: action.payload,
+        loading: false,
+      };
+    case TeamActionTypes.GET_TEAM_HISTORICAL:
+      const { teamHistoricalSpending, nflAverageSpending } = action;
+      return {
+        ...state,
+        teamHistoricalSpending,
+        nflAverageSpending,
         loading: false,
       };
     case TeamActionTypes.GET_SPENDING_ERROR:

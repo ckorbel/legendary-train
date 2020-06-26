@@ -15,7 +15,7 @@ function doesTeamExist(teams: Team[], id: string): boolean {
 
 function filterCapCategories(
   spendingObj: IYearlyPostionalSpending,
-  fitlerObj: IYearlyPostionalSpending
+  fitlerObj: any
 ): IYearlyPostionalSpending {
   for (let key in spendingObj) {
     if (key in fitlerObj) {
