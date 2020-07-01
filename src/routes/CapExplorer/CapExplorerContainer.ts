@@ -8,10 +8,15 @@ import {
 
 const mapState = (state: BaseState) => {
   const { team } = state;
-  const { teams, teamHistoricalSpending } = team;
+  const { teams, teamHistoricalSpending, nflAverageSpending } = team;
+  const selectedTeamId = teamHistoricalSpending
+    ? teamHistoricalSpending.id
+    : null;
   return {
+    nflAverageSpending,
     teams,
     teamHistoricalSpending,
+    selectedTeamId,
   };
 };
 

@@ -57,8 +57,8 @@ export interface TeamSpendingState {
 }
 
 export interface TeamBaseState {
-  nflAverageSpending: TeamWithSpending[];
-  teamHistoricalSpending: TeamSpendingState[];
+  nflAverageSpending: TeamWithSpending | null;
+  teamHistoricalSpending: TeamWithSpending | null;
   teams: TeamWithSpending[];
   loading: boolean;
 }

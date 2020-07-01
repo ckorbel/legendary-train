@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import SidePanel from "./SidePanel/SidePanel";
-import ExploreOptionsBar from "./ExplorerOptions/ExplorerOptionsBar";
 import Pie from "./CapGraphs/Pie";
+import HistoricalSpending from "./HistoricalSpending/HistoricalSpending";
 import { doesTeamExist } from "../../utils/cap-explorer";
 import { getTeamPostionSpending } from "../../lib/team";
 import { BaseState } from "../../actions/alert/alert.types";
 import { filterCapCategories } from "../../utils/cap-explorer";
 import {
-  IYearlyPostionalSpending,
   TeamSpendingState,
   PostitionalSpending,
   SideOfBallSpending,
@@ -21,12 +20,24 @@ export interface IExplorerOptionsBarState {
   historical: boolean;
 }
 
+interface CapExlorerState {
+  view: "team" | "teams";
+}
+
 interface CapExplorerProps {
+  nflAverageSpending: TeamWithSpending | null;
   teamSpending: TeamSpendingState[];
   teams: TeamWithSpending[];
   getAllTeams: () => void;
   setTeamSpendings: (id: string) => void;
+  teamHistoricalSpending: TeamWithSpending | null;
+  selectedTeamId: string | null;
 }
+
+const ExplorerOptionsBarStyled = styled.div`
+  border: 1px solid purple;
+  height: 120px;
+`;
 
 const CapExlorerStyled = styled.div`
   display: grid;
@@ -40,28 +51,26 @@ const CapExlorerStyled = styled.div`
 `;
 
 const CapExplorer: React.FC<CapExplorerProps> = ({
+  nflAverageSpending,
   setTeamSpendings,
   getAllTeams,
-  teamSpending,
+  teamHistoricalSpending,
+  selectedTeamId,
   teams,
 }) => {
   const [selected, setSelectedTeams] = useState<TeamWithSpending[]>([]);
-  const [formData, setFormData] = useState<IExplorerOptionsBarState>({
-    positionSpending: "position",
-    historical: false,
+  const [formData, setFormData] = useState<CapExlorerState>({
+    view: "team",
   });
 
   useEffect(() => {
     getAllTeams();
-    setTeamSpendings("ckb12b09m003e0734ze6gn35f");
   }, []);
 
   const selectTeamToGraph = async (team: Team): Promise<any> => {
+    const { view } = formData;
     const { id } = team;
-    if (!doesTeamExist(selected, id)) {
-      const teamSpending = await getTeamPostionSpending(id);
-      setSelectedTeams([...selected, teamSpending]);
-    }
+    setTeamSpendings(id);
   };
 
   const removeSelection = (id: string): void => {
@@ -71,6 +80,16 @@ const CapExplorer: React.FC<CapExplorerProps> = ({
       }
     );
     setSelectedTeams(newSelected);
+  };
+
+  const handleSelectChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ): void => {
+    event.preventDefault();
+    setFormData({
+      ...formData,
+      [event.target.name]: event.target.value,
+    } as any);
   };
 
   const handleToggle = (value: string): void => {
@@ -96,11 +115,36 @@ const CapExplorer: React.FC<CapExplorerProps> = ({
 
   return (
     <>
-      <ExploreOptionsBar formData={formData} handleToggle={handleToggle} />
+      <ExplorerOptionsBarStyled>
+        <form>
+          <label>Historical</label>
+          <select
+            name="view"
+            value={formData.view}
+            onChange={handleSelectChange}
+          >
+            <option value="team">Single Team</option>
+            <option value="teams">Teams</option>
+          </select>
+        </form>
+      </ExplorerOptionsBarStyled>
       <CapExlorerStyled>
-        <SidePanel teams={teams} selectTeam={selectTeamToGraph} />
+        <SidePanel
+          teams={teams}
+          selectTeam={selectTeamToGraph}
+          selectedTeamId={selectedTeamId}
+        />
         <div style={{ display: "flex" }}>
-          {selected &&
+          {formData.view === "team" ? (
+            <HistoricalSpending
+              nflAverageSpending={nflAverageSpending}
+              teamHistoricalSpending={teamHistoricalSpending}
+            />
+          ) : (
+            <div>Other option</div>
+          )}
+
+          {/* {selected &&
             selected.map((teamSpending) => {
               return (
                 <Pie
@@ -111,7 +155,7 @@ const CapExplorer: React.FC<CapExplorerProps> = ({
                   positionalSpending={fitleredToPosition(teamSpending)}
                 />
               );
-            })}
+            })} */}
         </div>
       </CapExlorerStyled>
     </>

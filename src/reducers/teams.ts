@@ -5,8 +5,8 @@ import {
 } from "../actions/team-spending/team-spending.types";
 
 const initialState: TeamBaseState = {
-  nflAverageSpending: [],
-  teamHistoricalSpending: [],
+  nflAverageSpending: null,
+  teamHistoricalSpending: null,
   teams: [],
   loading: false,
 };
