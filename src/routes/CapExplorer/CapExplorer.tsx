@@ -134,7 +134,7 @@ const CapExplorer: React.FC<CapExplorerProps> = ({
           selectTeam={selectTeamToGraph}
           selectedTeamId={selectedTeamId}
         />
-        <div style={{ display: "flex" }}>
+        <div>
           {formData.view === "team" ? (
             <HistoricalSpending
               nflAverageSpending={nflAverageSpending}
