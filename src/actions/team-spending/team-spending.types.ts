@@ -11,11 +11,16 @@ export interface IYearlyPostionalSpending {
   s: number;
   cb: number;
   year: number;
-  Defense: number;
+}
+
+export interface SideOfBallSpending {
+  [key: string]: any;
   Offense: number;
+  Defense: number;
 }
 
 export interface Team {
+  [key: string]: any;
   id: string;
   name: string;
   location: string;
@@ -38,22 +43,19 @@ export interface PostitionalSpending {
   lb: number;
   s: number;
   cb: number;
-}
-
-export interface SideOfBallSpending {
-  Defense: number;
-  Offense: number;
+  year: number;
 }
 
 export interface TeamSpendingState {
+  [key: string]: any;
   id: string;
   name: string;
   location: string;
   division: string;
   logo: string;
   abbrv_location: string;
-  sideOfBallSpening: SideOfBallSpending;
-  positionalSpending: PostitionalSpending;
+  sideOfBallSpending?: SideOfBallSpending[];
+  yearlyPostSpending: PostitionalSpending[];
 }
 
 export interface TeamBaseState {

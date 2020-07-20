@@ -4,7 +4,7 @@ import ConnectedScatterPlot from "../CapGraphs/ConnectedScatter";
 import DonutGraph from "../CapGraphs/DonutGraph";
 import { TeamWithSpending } from "../../../actions/team-spending/team-spending.types";
 
-const HistoricalSpendingStled = styled.div`
+const HistoricalSpendingStyled = styled.div`
   border: 2px solid green;
   display: grid;
   width: 100%;
@@ -31,7 +31,7 @@ const HistoricalSpending: React.FC<HistoricalSpendingProps> = ({
   nflAverageSpending,
 }) => {
   return (
-    <HistoricalSpendingStled>
+    <HistoricalSpendingStyled>
       <ConnectedScatterPlot
         selectTeamData={teamHistoricalSpending}
         nflAverageData={nflAverageSpending}
@@ -40,7 +40,7 @@ const HistoricalSpending: React.FC<HistoricalSpendingProps> = ({
         <DonutGraph />
         <DonutGraph />
       </div>
-    </HistoricalSpendingStled>
+    </HistoricalSpendingStyled>
   );
 };
 

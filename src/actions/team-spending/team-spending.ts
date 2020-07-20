@@ -12,6 +12,7 @@ import {
   GetTeamHistoricalAction,
 } from "./team-spending.types";
 import { getTeamPostionSpending, getTeams } from "../../lib/team";
+import { parseSpending } from "../../utils/cap-explorer";
 
 const nflAverageId: string = "ckbmhb9dw007n0734ywuwbiru";
 
@@ -58,7 +59,10 @@ export function setTeamSpendings<AppState extends TeamBaseState>(
         getTeamPostionSpending(nflAverageId),
         getTeamPostionSpending(id),
       ]);
-      dispatch(setTeamHistoricalSpending(teamSpending, nflAverageSpending));
+      const selectedTeam = parseSpending(teamSpending);
+      const averageYear = parseSpending(nflAverageSpending);
+
+      dispatch(setTeamHistoricalSpending(selectedTeam, averageYear));
     } catch (err) {
       dispatch(setSpendingError(err));
       throw new Error(err);
